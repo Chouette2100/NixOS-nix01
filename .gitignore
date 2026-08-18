@@ -1,0 +1,24 @@
+# Nix build artifacts
+result
+result-*
+
+# Local build/test artifacts
+build/
+
+# Secrets (unencrypted files)
+secrets/*.yaml
+secrets/*.json
+secrets/*.age
+!secrets/*.yaml.example
+!secrets/*.pub
+
+# Age keys
+*.age-key
+*.key
+
+# Temporary files
+*~
+*.swp
+*.swo
+
+*.gz
