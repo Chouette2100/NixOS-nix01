@@ -17,4 +17,6 @@ tar -czf "$filename" \
   flake.lock \
   modules \
   secrets \
+  install \
+  build.sh \
   tar.sh

@@ -15,6 +15,12 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
+  # インストール前の flake check 用デフォルト。
+  # install.sh 実行後は nixos-generate-config の出力に置き換わり、
+  # UEFI なら systemd-boot、BIOS なら GRUB が自動設定されます。
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "btrfs";

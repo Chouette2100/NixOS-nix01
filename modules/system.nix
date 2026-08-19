@@ -1,5 +1,6 @@
 # /etc/nixos/modules/system.nix
 # サーバー用システム設定（GUI/オーディオ/Bluetooth なし）
+# ブートローダーは hardware-configuration.nix で管理します。
 
 { pkgs, ... }:
 
@@ -22,10 +23,6 @@
       options = "--delete-generations +10";
     };
   };
-
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   time.timeZone = "Asia/Tokyo";
 
