@@ -119,6 +119,9 @@ in
     jq
     lsof
     pciutils
+    # ---
+    sops
+    age
 
     # Go 開発
     go

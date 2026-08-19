@@ -8,7 +8,7 @@ build/
 # Secrets (unencrypted files)
 secrets/*.yaml
 secrets/*.json
-secrets/*.age
+!secrets/*.age
 !secrets/*.yaml.example
 !secrets/*.pub
 

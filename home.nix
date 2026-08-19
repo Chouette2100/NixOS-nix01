@@ -26,7 +26,7 @@
           User git
 
         Host kagoya10
-          HostName 133.18.43.195
+          HostName 133.18.160.207
           User chouette
           Port 9978
 
@@ -47,7 +47,29 @@
     };
   };
 
+  # 秘密鍵の復号化をactivationScriptで実行
+  home.activation = {
+    decryptSSHKey = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      # age鍵が存在する場合のみ復号化を実行
+      if [ -f "${config.home.homeDirectory}/.config/age/key.txt" ]; then
+        ${pkgs.age}/bin/age -d \
+          -i "${config.home.homeDirectory}/.config/age/key.txt" \
+          -o "${config.home.homeDirectory}/.ssh/id_ed25519" \
+          "/etc/nixos/secrets/id_ed25519.age"
+        
+        chmod 600 "${config.home.homeDirectory}/.ssh/id_ed25519"
+
+        echo "SSH private key decrypted successfully"
+      else
+        echo "Warning: age key not found at ~/.config/age/key.txt"
+        echo "Please decrypt manually:"
+        echo "  age -d -i ~/.config/age/key.txt -o ~/.ssh/id_ed25519 ~/NixOS-nixos/secrets/id_ed25519.age"
+      fi
+    '';
+  };
+
   systemd.user.tmpfiles.rules = [
+    "f /home/chouette/.ssh/id_ed25519 0600 - - - -"
     "f /home/chouette/.ssh/config 0600 - - - -"
   ];
 

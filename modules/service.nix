@@ -35,7 +35,7 @@ in
         bind-address = "127.0.0.1";
         port = 3306;
         character-set-server = "utf8mb4";
-        collation-server = "utf8mb4_unicode_ci";
+        collation-server = "utf8mb4_uca1400_ai_ci";
         default-storage-engine = "InnoDB";
       };
     };
