@@ -61,7 +61,7 @@
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
 
-    path = [ pkgs.sops ];  # これでサービスのPATHにsopsが入る
+    # path = [ pkgs.sops ];  # これでサービスのPATHにsopsが入る
 
     serviceConfig = {
       Type = "simple";
@@ -75,6 +75,9 @@
       KillMode = "process";
       Restart = "always";
       RestartSec = "10s";
+      Environment = [
+        "PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/bin:/bin"
+      ];
     };
 
     environment = {
