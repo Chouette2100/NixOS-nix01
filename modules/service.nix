@@ -81,7 +81,7 @@
     };
 
     environment = {
-      SOPS_AGE_KEY_FILE = "/home/chouette/.config/age/key.txt";
+      SOPS_AGE_KEY_FILE = "/home/chouette/.config/age/key2.txt";
       SPORT = "8081";
     };
   };
