@@ -52,25 +52,31 @@
     decryptSSHKey = lib.hm.dag.entryAfter ["writeBoundary"] ''
       # age鍵が存在する場合のみ復号化を実行
       if [ -f "${config.home.homeDirectory}/.config/age/key.txt" ]; then
-        ${pkgs.age}/bin/age -d \
-          -i "${config.home.homeDirectory}/.config/age/key.txt" \
-          -o "${config.home.homeDirectory}/.ssh/id_ed25519" \
-        "/etc/nixos/secrets/id_ed25519.age"
-        
-        chmod 600 "${config.home.homeDirectory}/.ssh/id_ed25519"
+        key_target="${config.home.homeDirectory}/.ssh/id_ed25519"
+        key_temp="${config.home.homeDirectory}/.ssh/id_ed25519.tmp"
 
-        echo "SSH private key decrypted successfully"
+        # 直接上書きせず一時ファイルに復号化し、成功時のみ置き換える。
+        if ${pkgs.age}/bin/age -d \
+          -i "${config.home.homeDirectory}/.config/age/key.txt" \
+          -o "$key_temp" \
+          "/etc/nixos/secrets/id_ed25519.age"; then
+          mv -f "$key_temp" "$key_target"
+          chmod 600 "$key_target"
+          echo "SSH private key decrypted successfully"
+        else
+          rm -f "$key_temp"
+          echo "ERROR: Failed to decrypt SSH private key" >&2
+          exit 1
+        fi
       else
         echo "Warning: age key not found at ~/.config/age/key.txt"
         echo "Please decrypt manually:"
-        echo "  age -d -i ~/.config/age/key.txt -o ~/.ssh/id_ed25519 ~/NixOS-nixos/secrets/id_ed25519.age"
+        echo "  age -d -i ~/.config/age/key.txt -o ~/.ssh/id_ed25519 ~/NixOS-nix01/secrets/id_ed25519.age"
       fi
     '';
   };
 
-  systemd.user.tmpfiles.rules = [
-    "f /home/chouette/.ssh/id_ed25519 0600 - - - -"
-  ];
+  systemd.user.tmpfiles.rules = [ ];
 
   programs.direnv.enable = true;
 
