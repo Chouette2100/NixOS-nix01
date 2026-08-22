@@ -70,7 +70,6 @@
 
   systemd.user.tmpfiles.rules = [
     "f /home/chouette/.ssh/id_ed25519 0600 - - - -"
-    "f /home/chouette/.ssh/config 0600 - - - -"
   ];
 
   programs.direnv.enable = true;
