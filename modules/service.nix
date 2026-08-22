@@ -61,6 +61,8 @@
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
 
+    path = [ pkgs.sops ];  # これでサービスのPATHにsopsが入る
+
     serviceConfig = {
       Type = "simple";
       ExecStart = "/home/chouette/MyProject/Misc/dschat/deepseek-chat";
