@@ -51,4 +51,33 @@
   # SSH トンネル（スタンドアローン確認後に有効化予定）
   # -----------------------------------------------------------------------------
   # systemd.services.ssh-tunnel-kagoya = { ... };
+
+  # -----------------------------------------------------------------------------
+  # dschat (non-root)
+  # -----------------------------------------------------------------------------
+  systemd.services.dschat = {
+    description = "GenAI chat";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "/home/chouette/MyProject/Misc/dschat/deepseek-chat";
+      WorkingDirectory = "/home/chouette/MyProject/Misc/dschat";
+
+      # key.txt owner and service runner are intentionally the same user.
+      User = "chouette";
+      Group = "users";
+
+      KillMode = "process";
+      Restart = "always";
+      RestartSec = "10s";
+    };
+
+    environment = {
+      SOPS_AGE_KEY_FILE = "/home/chouette/.config/age/key.txt";
+      SPORT = "8081";
+    };
+  };
 }

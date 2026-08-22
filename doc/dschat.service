@@ -1,0 +1,19 @@
+# /home/chouette/.config/systemd/user/dschat.service
+# $ systemctl --user {enable|start|stop|disable} dschat.service
+[Unit]
+Description=GenAI chat
+#After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/home/chouette/MyProject/Misc/dschat/deepseek-chat
+Environment=SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key.txt
+Environment=SPORT=8081
+
+WorkingDirectory=/home/chouette/MyProject/Misc/dschat
+KillMode=process
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=default.target
