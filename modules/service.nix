@@ -1,11 +1,8 @@
 # /etc/nixos/modules/service.nix
 # サーバー用サービス設定
 
-{ lib, pkgs, hostName ? "nix01", ... }:
+{ pkgs, ... }:
 
-let
-  isNix01 = hostName == "nix01";
-in
 {
   # -----------------------------------------------------------------------------
   # MariaDB
@@ -41,9 +38,10 @@ in
     };
   };
 
-  # MariaDB(3306)は、プライベートLAN（192.168.1.0/24）からのみパケットを許可する
+  # MariaDB(3306)は、プライベートLAN（VPS/VM）からのみパケットを許可する
   networking.firewall.extraInputRules = ''
     ip saddr 192.168.1.0/24 tcp dport 3306 accept
+    ip saddr 192.168.122.0/24 tcp dport 3306 accept
   '';
 
   # nix02（将来の DB サーバー）ではリモート接続を許可する場合：

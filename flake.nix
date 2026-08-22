@@ -2,7 +2,7 @@
 # $ nix flake update
 # $ sudo nixos-rebuild switch --flake .#nix01
 {
-  description = "NixOS configuration for VPS servers (nix01 / nix02)";
+  description = "NixOS configuration for VPS and local VM servers (nix01 / nix02 / dev01 / dev02)";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
@@ -52,6 +52,8 @@
       nixosConfigurations = {
         nix01 = mkNixosConfig "nix01";
         nix02 = mkNixosConfig "nix02";
+        dev01 = mkNixosConfig "dev01";
+        dev02 = mkNixosConfig "dev02";
       };
     };
 }
