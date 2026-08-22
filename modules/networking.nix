@@ -14,6 +14,10 @@
     ipv6.addresses = [ { address = "2406:8c00:0:3438:133:18:43:195"; prefixLength = 64; } ];
   };
 
+  networking.interfaces.ens4 = {
+    ipv4.addresses = [ { address = "192.168.1.11"; prefixLength = 24; } ];
+  };
+
   networking.defaultGateway = {
     address = "133.18.42.1";
     interface = "ens3";

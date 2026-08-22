@@ -32,7 +32,7 @@ in
 
     settings = {
       mysqld = {
-        bind-address = "127.0.0.1";
+        bind-address = [ "0.0.0.0" ];
         port = 3306;
         character-set-server = "utf8mb4";
         collation-server = "utf8mb4_uca1400_ai_ci";
@@ -40,6 +40,11 @@ in
       };
     };
   };
+
+  # MariaDB(3306)は、プライベートLAN（192.168.1.0/24）からのみパケットを許可する
+  networking.firewall.extraInputRules = ''
+    ip saddr 192.168.1.0/24 tcp dport 3306 accept
+  '';
 
   # nix02（将来の DB サーバー）ではリモート接続を許可する場合：
   # services.mysql.settings.mysqld.bind-address = lib.mkIf (!isNix01) "0.0.0.0";

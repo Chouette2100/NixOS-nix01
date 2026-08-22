@@ -55,7 +55,7 @@
         ${pkgs.age}/bin/age -d \
           -i "${config.home.homeDirectory}/.config/age/key.txt" \
           -o "${config.home.homeDirectory}/.ssh/id_ed25519" \
-          "/etc/nixos/secrets/id_ed25519.age"
+        "/etc/nixos/secrets/id_ed25519.age"
         
         chmod 600 "${config.home.homeDirectory}/.ssh/id_ed25519"
 
