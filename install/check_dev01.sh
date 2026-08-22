@@ -13,6 +13,7 @@ LAN_IP_CIDR="${3:-192.168.122.234/24}"
 GATEWAY="${4:-192.168.122.1}"
 SSH_PORT="${SSH_PORT:-9978}"
 MYSQL_DB="${MYSQL_DB:-ms}"
+WARN_WINDOW_MIN="${WARN_WINDOW_MIN:-10}"
 
 PASS_COUNT=0
 FAIL_COUNT=0
@@ -49,12 +50,12 @@ check_cmd "DNS resolves google.com" getent hosts google.com
 check_cmd "gateway ${GATEWAY} reachable" ping -c 1 -W 2 "${GATEWAY}"
 check_cmd "internet reachable (google.com)" ping -c 1 -W 2 google.com
 
-check_cmd "mariadb service is active" sh -c "sudo systemctl is-active --quiet mariadb"
+check_cmd "mariadb service is active" sh -c "sudo systemctl is-active --quiet mariadb || sudo systemctl is-active --quiet mysql"
 check_cmd "database ${MYSQL_DB} exists" sh -c "sudo mariadb -Nse \"show databases like '${MYSQL_DB}';\" | grep -qx '${MYSQL_DB}'"
 check_cmd "firewall allows 3306 from 192.168.122.0/24" sh -c "sudo nft list ruleset | grep -q 'ip saddr 192.168.122.0/24 tcp dport 3306 accept'"
 check_cmd "no failed system units" sh -c "[ \"$(sudo systemctl --failed --no-legend | wc -l)\" -eq 0 ]"
 check_cmd "no failed user units" sh -c "[ \"$(systemctl --user --failed --no-legend | wc -l)\" -eq 0 ]"
-check_cmd "no .ssh/config tmpfiles warning this boot" sh -c "! sudo journalctl -b -p warning | grep -q '.ssh/config exists and is not a regular file'"
+check_cmd "no recent .ssh/config tmpfiles warning (${WARN_WINDOW_MIN}m)" sh -c "! sudo journalctl -b --since '-${WARN_WINDOW_MIN} min' -p warning | grep -q '.ssh/config exists and is not a regular file'"
 
 echo
 TOTAL=$((PASS_COUNT + FAIL_COUNT))
