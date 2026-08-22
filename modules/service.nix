@@ -61,12 +61,12 @@
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
 
-    # path = [ pkgs.sops ];  # これでサービスのPATHにsopsが入る
+    path = [ pkgs.sops ];  # これでサービスのPATHにsopsが入る
 
     serviceConfig = {
       Type = "simple";
-      ExecStart = "/home/chouette/MyProject/Misc/dschat/deepseek-chat";
-      WorkingDirectory = "/home/chouette/MyProject/Misc/dschat";
+      ExecStart = "/home/chouette/MyProject/misc/dschat/deepseek-chat";
+      WorkingDirectory = "/home/chouette/MyProject/misc/dschat";
 
       # key.txt owner and service runner are intentionally the same user.
       User = "chouette";
@@ -75,9 +75,9 @@
       KillMode = "process";
       Restart = "always";
       RestartSec = "10s";
-      Environment = [
-        "PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/bin:/bin"
-      ];
+      # Environment = [
+      #   "PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/bin:/bin"
+      # ];
     };
 
     environment = {
