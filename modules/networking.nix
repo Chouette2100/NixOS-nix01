@@ -4,6 +4,8 @@
 { hostName ? "nix01", ... }:
 
 let
+  isDevHost = hostName == "dev01" || hostName == "dev02";
+
   hostNetworking = {
     # VPS
     nix01 = {
@@ -62,7 +64,7 @@ let
         interface = "enp1s0";
       };
 
-      nameservers = [ "192.168.122.1" "1.1.1.1" ];
+      nameservers = [ "192.168.0.24" ];
     };
 
     dev02 = {
@@ -76,7 +78,7 @@ let
         interface = "enp1s0";
       };
 
-      nameservers = [ "192.168.122.1" "1.1.1.1" ];
+      nameservers = [ "192.168.0.24" ];
     };
   };
 
@@ -96,4 +98,12 @@ in
 
     nftables.enable = true;
   } // selectedNetworking;
+
+  # dev01/dev02 はローカル dnsmasq (192.168.0.24) へ名前解決を固定する。
+  services.resolved = if isDevHost then {
+    enable = true;
+    settings.Resolve.Domains = [ "~." ];
+  } else {
+    enable = false;
+  };
 }
