@@ -1,7 +1,7 @@
 # /etc/nixos/modules/networking.nix
 # ホスト別ネットワーク設定（nix01 / nix02 / dev01 / dev02）
 
-{ hostName ? "nix01", ... }:
+{ lib, hostName ? "nix01", ... }:
 
 let
   hostNetworking = {
@@ -83,6 +83,11 @@ let
   selectedNetworking =
     hostNetworking.${hostName}
     or (throw "Unsupported hostName '${hostName}' in modules/networking.nix");
+
+  resolvConfText = ''
+    # Managed by NixOS configuration
+    options edns0
+  '' + lib.concatMapStrings (ns: "nameserver ${ns}\n") selectedNetworking.nameservers;
 in
 {
   networking = {
@@ -94,11 +99,12 @@ in
       "133.18.160.207" = [ "kagoya10" ];
     };
 
-    # /etc/resolv.conf を nameservers から生成して DNS 問い合わせ先を固定する。
-    resolvconf.enable = true;
+    resolvconf.enable = false;
 
     nftables.enable = true;
   } // selectedNetworking;
+
+  environment.etc."resolv.conf".text = resolvConfText;
 
   services.resolved.enable = false;
 }
