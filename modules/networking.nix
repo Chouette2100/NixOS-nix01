@@ -4,8 +4,6 @@
 { hostName ? "nix01", ... }:
 
 let
-  isDevHost = hostName == "dev01" || hostName == "dev02";
-
   hostNetworking = {
     # VPS
     nix01 = {
@@ -96,14 +94,11 @@ in
       "133.18.160.207" = [ "kagoya10" ];
     };
 
+    # /etc/resolv.conf を nameservers から生成して DNS 問い合わせ先を固定する。
+    resolvconf.enable = true;
+
     nftables.enable = true;
   } // selectedNetworking;
 
-  # dev01/dev02 はローカル dnsmasq (192.168.0.24) へ名前解決を固定する。
-  services.resolved = if isDevHost then {
-    enable = true;
-    settings.Resolve.Domains = [ "~." ];
-  } else {
-    enable = false;
-  };
+  services.resolved.enable = false;
 }
