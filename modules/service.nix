@@ -51,6 +51,26 @@
   # SSH トンネル（スタンドアローン確認後に有効化予定）
   # -----------------------------------------------------------------------------
   # systemd.services.ssh-tunnel-kagoya = { ... };
+  systemd.services.ssh-tunnel-kagoya = {
+    description = "SSH Tunnel to Kagoya (Local & Reverse)";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ]; # これでログイン不要で起動
+
+    # SSHトンネル設定
+    # ローカル:9910 → リモートMySQL (127.0.0.1:3306)
+    # ローカル:9384 → リモートSyncthing (127.0.0.1:8384)
+    serviceConfig = {
+      User = "chouette"; # 既存のSSH鍵を持つユーザー
+      ExecStart = ''
+        ${pkgs.openssh}/bin/ssh -p 9978 -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes -N \
+          -L 9910:127.0.0.1:3306 \
+          chouette@192.168.1.10
+      '';
+      Restart = "always";
+      RestartSec = "15s";
+    };
+  };
 
   # -----------------------------------------------------------------------------
   # dschat (non-root)

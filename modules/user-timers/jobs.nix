@@ -4,11 +4,12 @@
   # - pathPkgNames: extra package binaries to add into PATH (e.g. [ "mariadb" ])
   # - extraPathDirs: extra absolute directories appended to PATH
   {
+
     name = "add-eventuser-main";
     workdir = "/home/chouette/MyProject/Showroom/AddEventuser";
     script = "/home/chouette/MyProject/Showroom/AddEventuser/run.sh";
     autostart = true;
-    pathPkgNames = [ "mariadb" ];
+    pathPkgNames = [ "sops" ];
     args = [ ];
     calendars = [
       "*-*-* 16:50:00"
@@ -34,8 +35,8 @@
     workdir = "/home/chouette/MyProject/Showroom/AddEventuser";
     script = "/home/chouette/MyProject/Showroom/AddEventuser/run.sh";
     autostart = true;
-    pathPkgNames = [ "mariadb" ];
-    args = [ "9910" "27h" ];
+    pathPkgNames = [ "sops" ];
+    args = [ "0" "27h" ];
     calendars = [ "*-*-* 19:06:00" ];
   }
 ]
