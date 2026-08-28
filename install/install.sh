@@ -59,7 +59,7 @@ else
     echo "    ${DISK}3  swap  (linux-swap)      ${SWAP_SIZE_GB}GiB from end - 100%"
 fi
 
-echo "  Btrfs subvolumes: @, @home, @nix, @mysql"
+echo "  Btrfs subvolumes: @, @home, @nix, @mysql, @shared"
 echo ""
 printf "Are you sure you want to continue? [y/N] "
 read -r confirm
@@ -109,6 +109,7 @@ btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@home
 btrfs subvolume create /mnt/@nix
 btrfs subvolume create /mnt/@mysql
+btrfs subvolume create /mnt/@shared
 # MariaDB 用サブボリュームでは CoW を無効化
 chattr +C /mnt/@mysql
 umount /mnt
@@ -118,11 +119,12 @@ umount /mnt
 # -----------------------------------------------------------------------------
 
 mount -o compress=zstd,discard=async,subvol=@ "${DISK}2" /mnt
-mkdir -p /mnt/{boot,home,nix,var/lib/mysql}
+mkdir -p /mnt/{boot,home,nix,shared,var/lib/mysql}
 mount -o compress=zstd,discard=async,subvol=@home "${DISK}2" /mnt/home
 mount -o compress=zstd,noatime,discard=async,subvol=@nix "${DISK}2" /mnt/nix
 # MariaDB 用: CoW 無効（nodatacow）で SSD 最適化
 mount -o nodatacow,discard=async,subvol=@mysql "${DISK}2" /mnt/var/lib/mysql
+mount -o compress=zstd,discard=async,subvol=@shared "${DISK}2" /mnt/shared
 
 if [ "$BOOT_MODE" = "uefi" ]; then
     mount "${DISK}1" /mnt/boot
