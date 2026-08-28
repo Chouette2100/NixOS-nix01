@@ -121,6 +121,7 @@ in
     # ---
     sops
     age
+    multitail
 
     # Go 開発
     go
@@ -135,6 +136,7 @@ in
     # Nix 開発
     nixd
     nixpkgs-fmt
+    # ---
 
     # DB クライアント
     mariadb
