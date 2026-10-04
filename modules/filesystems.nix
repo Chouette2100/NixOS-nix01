@@ -67,7 +67,7 @@ in
   services.nfs.server = lib.mkIf isNfsServer {
     enable = true;
     exports = ''
-      /shared ${nfsExportCidr}(rw,sync,no_subtree_check)
+      /mnt/shared ${nfsExportCidr}(rw,sync,no_subtree_check)
     '';
   };
 

@@ -71,7 +71,7 @@ in
   # -----------------------------------------------------------------------------
 
   services.caddy = lib.mkIf isNix01 {
-    enable = true;
+    enable = false;
     virtualHosts."nix01.chouette2100.com" = {
       extraConfig = ''
         reverse_proxy :8081
@@ -97,7 +97,7 @@ in
   # -----------------------------------------------------------------------------
 
   networking.firewall.allowedTCPPorts =
-    [ 9978 8081 ]  # SSH
+    [ 9978 8081 8000]  # SSH, ___, SRCGI
     ++ lib.optionals isNix01 [ 80 443 ];  # Caddy / Let's Encrypt
   # -----------------------------------------------------------------------------
   # システムパッケージ（サーバー用途のみ）
