@@ -66,6 +66,9 @@ in
     memoryPercent = 50;
   };
 
+  # vscodeリモート開発用(1/2)
+  programs.nix-ld.enable = true;
+
   # -----------------------------------------------------------------------------
   # Caddy（nix01 のみ）
   # -----------------------------------------------------------------------------
@@ -97,7 +100,7 @@ in
   # -----------------------------------------------------------------------------
 
   networking.firewall.allowedTCPPorts =
-    [ 9978 8081 8000]  # SSH, ___, SRCGI
+    [ 9978 8081 8000 8080]  # SSH, dschat, SRCGI, SRCGI
     ++ lib.optionals isNix01 [ 80 443 ];  # Caddy / Let's Encrypt
   # -----------------------------------------------------------------------------
   # システムパッケージ（サーバー用途のみ）
@@ -132,6 +135,12 @@ in
     impl
     gomodifytags
     go-outline
+
+    # vscodeリモート開発用(2/2)
+    gcc
+    gnumake
+    # go install github.com/go-delve/delve/cmd/dlv@latest
+    # vscode用拡張機能(vscodeがインストールを要求する)
 
     # Nix 開発
     nixd
