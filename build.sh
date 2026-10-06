@@ -11,7 +11,7 @@ HOST="$1"
 case "$HOST" in
     nix01|nix02|dev01|dev02)
         echo "Building for ${HOST}..."
-        sudo nixos-rebuild switch --flake ".#${HOST}"
+        sudo nixos-rebuild switch --flake ".#${HOST}" --impure
         ;;
     *)
         echo "Usage: $0 [nix01|nix02|dev01|dev02]"

@@ -1,7 +1,7 @@
 # /etc/nixos/modules/service.nix
 # サーバー用サービス設定
 
-{ pkgs, ... }:
+{ pkgs, self, ... }:
 
 {
   # -----------------------------------------------------------------------------
@@ -69,6 +69,33 @@
       '';
       Restart = "always";
       RestartSec = "15s";
+    };
+  };
+
+
+  # -----------------------------------------------------------------------------
+  # SRCGI (non-root)
+  # -----------------------------------------------------------------------------
+  systemd.services.srcgi = {
+    description = "SRCGI";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    path = [ pkgs.sops pkgs.age ];
+
+    serviceConfig = {
+      Type = "simple";
+      User = "chouette";
+      Group = "users";
+      WorkingDirectory = "/var/lib/srcgi"; # ここがアプリのカレントディレクトリになる
+      Environment = [
+          "HTTPPORT=8000"
+          "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
+      ];
+      ExecStart = "${self.packages.${pkgs.system}.srcgi}/bin/SRCGI";
+      StateDirectory = "srcgi";
+      Restart = "no";
     };
   };
 

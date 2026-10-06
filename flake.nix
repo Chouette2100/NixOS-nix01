@@ -26,7 +26,7 @@
       mkNixosConfig = hostName: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
-          inherit hostName inputs;
+          inherit hostName inputs self;
         };
 
         modules = [
@@ -47,8 +47,25 @@
           }
         ];
       };
+
+      # SRCGI package definition
+      srcgiPackage = nixpkgs.legacyPackages.x86_64-linux.buildGoModule {
+        pname = "srcgi";
+        version = "2.23.0";
+        src = /home/chouette/go;
+        modRoot = "src/SRCGI";
+        vendorHash = "sha256-aN99qRfbHYB/wa+gtHjPx4iSR6YLhaUIC2Zy94CLjXs=";
+        doCheck = false;
+      };
+
+
+
+
+
     in
     {
+      packages.x86_64-linux.srcgi = srcgiPackage;
+
       nixosConfigurations = {
         nix01 = mkNixosConfig "nix01";
         nix02 = mkNixosConfig "nix02";
