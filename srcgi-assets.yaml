@@ -1,0 +1,42 @@
+items:
+  - kind: rename
+    src: DBConfig_K10.enc.yaml
+    dest: DBConfig.enc.yaml
+  - kind: rename
+    src: DBConfig_9911.enc.yaml
+    dest: DBConfig1.enc.yaml
+  - kind: rename
+    src: ServerConfig_HTTPPORT.enc.yaml
+    dest: ServerConfig.enc.yaml
+  - kind: rename
+    src: thpoint.txt.ref
+    dest: thpoint.txt
+
+  - kind: file
+    src: bots.yml
+  - kind: file
+    src: nontargetentry.yml
+  - kind: file
+    src: Env.yml
+  - kind: file
+    src: excl.txt
+  - kind: file
+    src: rvl.txt
+  - kind: file
+    src: DenyIp.txt
+  - kind: file
+    src: cidr.txt
+  - kind: dir
+    src: public
+    dest: public
+
+  - kind: dir
+    src: templates
+    dest: templates
+
+# kind: write
+# src は使わず、/var/lib/srcgi に実体を作る。
+# 例:
+#  - kind: write
+#    dest: runtime-state.txt
+#    mode: "0644"

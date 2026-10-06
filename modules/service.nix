@@ -82,7 +82,32 @@
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
 
-    path = [ pkgs.sops pkgs.age ];
+    path = [ pkgs.sops pkgs.age pkgs.coreutils ];
+
+    preStart = ''
+      set -eu
+
+      manifest=${self.packages.${pkgs.system}.srcgiAssets}/manifest.tsv
+
+      while IFS="$(printf '\t')" read -r kind rel target mode; do
+        [ -n "$kind" ] || continue
+
+        case "$kind" in
+          ro)
+            mkdir -p "/var/lib/srcgi/$(dirname "$rel")"
+            ln -sfn "$target" "/var/lib/srcgi/$rel"
+            ;;
+          write)
+            mkdir -p "/var/lib/srcgi/$(dirname "$rel")"
+            if [ ! -e "/var/lib/srcgi/$rel" ] || [ -L "/var/lib/srcgi/$rel" ]; then
+              rm -f "/var/lib/srcgi/$rel"
+              : > "/var/lib/srcgi/$rel"
+              chmod "${mode:-0644}" "/var/lib/srcgi/$rel"
+            fi
+            ;;
+        esac
+      done < "$manifest"
+    '';
 
     serviceConfig = {
       Type = "simple";

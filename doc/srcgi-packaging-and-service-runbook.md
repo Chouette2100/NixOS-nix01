@@ -22,6 +22,7 @@
 - vendorHash は fakeHash で一度ビルドして実値に置き換える
 - src に絶対パスを使う場合、nixos-rebuild は --impure が必要
 - systemd サービスで外部コマンドを使う場合、environment.systemPackages とは別に service 側の path 指定が必要
+- 配布マニフェストは YAML で持つと、file / rename / dir / write を明示できて扱いやすい
 - systemd で append ログ出力を指定する場合、出力先ファイル/ディレクトリ条件が合わないと status=209/STDOUT でアプリ起動前に落ちる
 - 実行時ファイルが未配置なら、サービスは起動後に失敗して failed になる（この段階では想定内）
 - 設定ファイルとデータファイルがそろえば、同じ service 定義のまま正常起動できる
@@ -130,7 +131,37 @@ specialArgs = {
 };
 ```
 
-### 4-5. 適用と確認
+### 4-5. YAML マニフェストで配布ファイルを定義する
+
+1. `srcgi-assets.yaml` のような YAML を配布マニフェストとして使う
+2. `kind: file` は同名ファイルを読む
+3. `kind: rename` は配置時に名前を変える
+4. `kind: dir` はディレクトリを丸ごと配布する（`public` のような単独ファイル入りディレクトリにも使う）
+5. `kind: write` は `/var/lib/<name>` に実体ファイルを作る
+6. 生成した assets を `srcgiAssets` のような derivation にまとめる
+7. サービス起動時に `preStart` で `/var/lib/<name>` を組み立てる
+
+例（SRCGI の考え方）:
+
+```nix
+srcgiAssets = pkgs.runCommand "srcgi-assets" { ... } ''
+  # YAML を読み、read-only と write を分けて manifest.tsv を組み立てる
+'';
+
+systemd.services.srcgi = {
+  preStart = ''
+    # manifest.tsv を読み、read-only は symlink、write は実体ファイルを作る
+  '';
+};
+```
+
+補足:
+- これでソースツリーは書き換えない
+- 実行時ファイルは `/var/lib/<name>` に残し、読み取り専用設定は store 側に置ける
+- ファイル数が不定の `templates/` でも、そのまま追随できる
+- `write` 項目は今後必要になったときに YAML に追加できる
+
+### 4-6. 適用と確認
 
 ```bash
 sudo nixos-rebuild switch --flake .#nix01 --impure
