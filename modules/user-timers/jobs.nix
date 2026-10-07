@@ -1,3 +1,5 @@
+{ pkgs, self, ... }:
+
 [
   # Optional per-job knobs:
   # - autostart: true/false (default: true)
@@ -38,5 +40,47 @@
     pathPkgNames = [ "sops" ];
     args = [ "0" "27h" ];
     calendars = [ "*-*-* 19:06:00" ];
+  }
+
+  {
+    name = "srgce-main";
+    workdir = "/var/lib/srgce";
+    script = pkgs.writeShellScript "srgce-user-timer.sh" ''
+      set -eu
+
+      manifest='${self.packages.${pkgs.system}.srgceAssets}/manifest.tsv'
+
+      while IFS="$(printf '\t')" read -r kind rel target mode; do
+        [ -n "$kind" ] || continue
+
+        case "$kind" in
+          ro)
+            mkdir -p "/var/lib/srgce/$(dirname "$rel")"
+            ln -sfn "$target" "/var/lib/srgce/$rel"
+            ;;
+          write)
+            mkdir -p "/var/lib/srgce/$(dirname "$rel")"
+            if [ ! -e "/var/lib/srgce/$rel" ] || [ -L "/var/lib/srgce/$rel" ]; then
+              rm -f "/var/lib/srgce/$rel"
+              : > "/var/lib/srgce/$rel"
+              chmod "${mode:-0644}" "/var/lib/srgce/$rel"
+            fi
+            ;;
+        esac
+      done < "$manifest"
+
+      exec ${self.packages.${pkgs.system}.srgce}/bin/SRGCE
+    '';
+    autostart = true;
+    args = [ ];
+    environment = [
+      "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
+      "DBHOST=localhost"
+      "DBPORT=3306"
+    ];
+    calendars = [
+      "*-*-* *:05,35:00"
+      "*-*-* 18,19:20,50:00"
+    ];
   }
 ]

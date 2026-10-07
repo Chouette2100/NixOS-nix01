@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, self, ... }:
 
 let
-  jobs = import ./jobs.nix;
+  jobs = import ./jobs.nix { inherit pkgs self; };
   basePathPkgs = with pkgs; [
     sops
     age
@@ -34,7 +34,7 @@ let
       Service = {
         Type = "oneshot";
         WorkingDirectory = job.workdir;
-        Environment = [ "PATH=${pathValue}" ];
+        Environment = [ "PATH=${pathValue}" ] ++ (job.environment or [ ]);
         ExecStart =
           "${pkgs.bash}/bin/bash ${lib.escapeShellArg job.script}"
           + (lib.optionalString (job.args != [ ]) " ${lib.concatStringsSep " " (map lib.escapeShellArg job.args)}");
