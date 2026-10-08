@@ -1,13 +1,11 @@
 items:
   - kind: rename
-    src: DBConfig_K10.enc.yaml
-    dest: DBConfig.enc.yaml
-  - kind: rename
-    src: DBConfig_9911.enc.yaml
-    dest: DBConfig1.enc.yaml
-  - kind: rename
     src: ServerConfig_HTTPPORT.enc.yaml
     dest: ServerConfig.enc.yaml
+  - kind: file
+    src: DBConfig.enc.yaml
+  - kind: file
+    src: DBConfig1.enc.yaml
   - kind: rename
     src: thpoint.txt.ref
     dest: thpoint.txt
@@ -26,9 +24,13 @@ items:
     src: DenyIp.txt
   - kind: file
     src: cidr.txt
-  - kind: dir
-    src: public
+  - kind: makeDir
     dest: public
+    mode: "0755"
+
+  - kind: file
+    src: public/index.html
+    dest: public/index.html
 
   - kind: dir
     src: templates

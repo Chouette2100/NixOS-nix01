@@ -83,4 +83,304 @@
       "*-*-* 18,19:20,50:00"
     ];
   }
+
+  {
+    name = "sruusp-main";
+    workdir = "/var/lib/sruusp";
+    script = pkgs.writeShellScript "sruusp-user-timer.sh" ''
+      set -eu
+
+      manifest='${self.packages.${pkgs.system}.sruuspAssets}/manifest.tsv'
+
+      while IFS="$(printf '\t')" read -r kind rel target mode; do
+        [ -n "$kind" ] || continue
+
+        case "$kind" in
+          ro)
+            mkdir -p "/var/lib/sruusp/$(dirname "$rel")"
+            ln -sfn "$target" "/var/lib/sruusp/$rel"
+            ;;
+          write)
+            mkdir -p "/var/lib/sruusp/$(dirname "$rel")"
+            if [ ! -e "/var/lib/sruusp/$rel" ] || [ -L "/var/lib/sruusp/$rel" ]; then
+              rm -f "/var/lib/sruusp/$rel"
+              : > "/var/lib/sruusp/$rel"
+              chmod "${mode:-0644}" "/var/lib/sruusp/$rel"
+            fi
+            ;;
+        esac
+      done < "$manifest"
+
+      ln -sfn "${self.packages.${pkgs.system}.sruusp}/bin/UpdateUserSetProperty" "/var/lib/sruusp/UpdateUserSetProperty"
+      exec "/var/lib/sruusp/run.sh" "$@"
+    '';
+    autostart = true;
+    args = [ "Sr" "220" "Pt" "100000" "Rk" "daily" "last" "10" ];
+    environment = [
+      "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
+      "DBHOST=localhost"
+      "DBPORT=3306"
+      "WORKDR=/var/lib/sruusp"
+    ];
+    calendars = [
+      "Mon *-*-* 00:45:00"
+      "Tue *-*-* 00:45:00"
+      "Wed *-*-* 00:45:00"
+      "Thu *-*-* 00:45:00"
+      "Fri *-*-* 00:45:00"
+      "Sat *-*-* 00:45:00"
+      "Sun *-*-* 00:45:00"
+    ];
+  }
+
+  {
+    name = "srscd-uinf";
+    workdir = "/var/lib/srscd";
+    script = pkgs.writeShellScript "srscd-uinf-user-timer.sh" ''
+      set -eu
+
+      manifest='${self.packages.${pkgs.system}.srscdAssets}/manifest.tsv'
+
+      while IFS="$(printf '\t')" read -r kind rel target mode; do
+        [ -n "$kind" ] || continue
+
+        case "$kind" in
+          ro)
+            mkdir -p "/var/lib/srscd/$(dirname "$rel")"
+            ln -sfn "$target" "/var/lib/srscd/$rel"
+            ;;
+          write)
+            mkdir -p "/var/lib/srscd/$(dirname "$rel")"
+            if [ ! -e "/var/lib/srscd/$rel" ] || [ -L "/var/lib/srscd/$rel" ]; then
+              rm -f "/var/lib/srscd/$rel"
+              : > "/var/lib/srscd/$rel"
+              chmod "${mode:-0644}" "/var/lib/srscd/$rel"
+            fi
+            ;;
+        esac
+      done < "$manifest"
+
+      ln -sfn "${self.packages.${pkgs.system}.srscd}/bin/SaveConfirmedData" "/var/lib/srscd/SaveConfirmedData"
+      exec "/var/lib/srscd/uinf.sh"
+    '';
+    autostart = true;
+    args = [ ];
+    environment = [
+      "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
+      "DBHOST=localhost"
+      "DBPORT=3306"
+      "WORKDR=/var/lib/srscd"
+    ];
+    calendars = [
+      "*-*-* 02:25:00"
+    ];
+  }
+
+  {
+    name = "srscd-sdat";
+    workdir = "/var/lib/srscd";
+    script = pkgs.writeShellScript "srscd-sdat-user-timer.sh" ''
+      set -eu
+
+      manifest='${self.packages.${pkgs.system}.srscdAssets}/manifest.tsv'
+
+      while IFS="$(printf '\t')" read -r kind rel target mode; do
+        [ -n "$kind" ] || continue
+
+        case "$kind" in
+          ro)
+            mkdir -p "/var/lib/srscd/$(dirname "$rel")"
+            ln -sfn "$target" "/var/lib/srscd/$rel"
+            ;;
+          write)
+            mkdir -p "/var/lib/srscd/$(dirname "$rel")"
+            if [ ! -e "/var/lib/srscd/$rel" ] || [ -L "/var/lib/srscd/$rel" ]; then
+              rm -f "/var/lib/srscd/$rel"
+              : > "/var/lib/srscd/$rel"
+              chmod "${mode:-0644}" "/var/lib/srscd/$rel"
+            fi
+            ;;
+        esac
+      done < "$manifest"
+
+      ln -sfn "${self.packages.${pkgs.system}.srscd}/bin/SaveConfirmedData" "/var/lib/srscd/SaveConfirmedData"
+      exec "/var/lib/srscd/sdat.sh"
+    '';
+    autostart = true;
+    args = [ ];
+    environment = [
+      "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
+      "DBHOST=localhost"
+      "DBPORT=3306"
+      "WORKDR=/var/lib/srscd"
+    ];
+    calendars = [
+      "*-*-* 12:05,35:00"
+    ];
+  }
+
+  {
+    name = "srscd-sdatP";
+    workdir = "/var/lib/srscd";
+    script = pkgs.writeShellScript "srscd-sdatP-user-timer.sh" ''
+      set -eu
+
+      manifest='${self.packages.${pkgs.system}.srscdAssets}/manifest.tsv'
+
+      while IFS="$(printf '\t')" read -r kind rel target mode; do
+        [ -n "$kind" ] || continue
+
+        case "$kind" in
+          ro)
+            mkdir -p "/var/lib/srscd/$(dirname "$rel")"
+            ln -sfn "$target" "/var/lib/srscd/$rel"
+            ;;
+          write)
+            mkdir -p "/var/lib/srscd/$(dirname "$rel")"
+            if [ ! -e "/var/lib/srscd/$rel" ] || [ -L "/var/lib/srscd/$rel" ]; then
+              rm -f "/var/lib/srscd/$rel"
+              : > "/var/lib/srscd/$rel"
+              chmod "${mode:-0644}" "/var/lib/srscd/$rel"
+            fi
+            ;;
+        esac
+      done < "$manifest"
+
+      ln -sfn "${self.packages.${pkgs.system}.srscd}/bin/SaveConfirmedData" "/var/lib/srscd/SaveConfirmedData"
+      exec "/var/lib/srscd/sdatP.sh"
+    '';
+    autostart = true;
+    args = [ ];
+    environment = [
+      "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
+      "DBHOST=localhost"
+      "DBPORT=3306"
+      "WORKDR=/var/lib/srscd"
+    ];
+    calendars = [
+      "*-*-* 00:15:00"
+      "*-*-* 13:15:00"
+      "*-*-* 18:15:00"
+      "*-*-* 20:15:00"
+      "*-*-* 22:15:00"
+    ];
+  }
+
+  {
+    name = "sruusp-weekly";
+    workdir = "/var/lib/sruusp";
+    script = pkgs.writeShellScript "sruusp-weekly-user-timer.sh" ''
+      set -eu
+      manifest='${self.packages.${pkgs.system}.sruuspAssets}/manifest.tsv'
+      while IFS="$(printf '\t')" read -r kind rel target mode; do
+        [ -n "$kind" ] || continue
+        case "$kind" in
+          ro)
+            mkdir -p "/var/lib/sruusp/$(dirname "$rel")"
+            ln -sfn "$target" "/var/lib/sruusp/$rel"
+            ;;
+          write)
+            mkdir -p "/var/lib/sruusp/$(dirname "$rel")"
+            if [ ! -e "/var/lib/sruusp/$rel" ] || [ -L "/var/lib/sruusp/$rel" ]; then
+              rm -f "/var/lib/sruusp/$rel"
+              : > "/var/lib/sruusp/$rel"
+              chmod "${mode:-0644}" "/var/lib/sruusp/$rel"
+            fi
+            ;;
+        esac
+      done < "$manifest"
+      ln -sfn "${self.packages.${pkgs.system}.sruusp}/bin/UpdateUserSetProperty" "/var/lib/sruusp/UpdateUserSetProperty"
+      exec "/var/lib/sruusp/run.sh" "$@"
+    '';
+    autostart = true;
+    args = [ "Sr" "220" "Pt" "100000" "Rk" "daily" "last" "10" "Rk" "weekly" "last" "15" ];
+    environment = [
+      "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
+      "DBHOST=localhost"
+      "DBPORT=3306"
+      "WORKDR=/var/lib/sruusp"
+    ];
+    calendars = [
+      "Mon *-*-* 00:45:00"
+    ];
+  }
+
+  {
+    name = "sruusp-monthly";
+    workdir = "/var/lib/sruusp";
+    script = pkgs.writeShellScript "sruusp-monthly-user-timer.sh" ''
+      set -eu
+      manifest='${self.packages.${pkgs.system}.sruuspAssets}/manifest.tsv'
+      while IFS="$(printf '\t')" read -r kind rel target mode; do
+        [ -n "$kind" ] || continue
+        case "$kind" in
+          ro)
+            mkdir -p "/var/lib/sruusp/$(dirname "$rel")"
+            ln -sfn "$target" "/var/lib/sruusp/$rel"
+            ;;
+          write)
+            mkdir -p "/var/lib/sruusp/$(dirname "$rel")"
+            if [ ! -e "/var/lib/sruusp/$rel" ] || [ -L "/var/lib/sruusp/$rel" ]; then
+              rm -f "/var/lib/sruusp/$rel"
+              : > "/var/lib/sruusp/$rel"
+              chmod "${mode:-0644}" "/var/lib/sruusp/$rel"
+            fi
+            ;;
+        esac
+      done < "$manifest"
+      ln -sfn "${self.packages.${pkgs.system}.sruusp}/bin/UpdateUserSetProperty" "/var/lib/sruusp/UpdateUserSetProperty"
+      exec "/var/lib/sruusp/run.sh" "$@"
+    '';
+    autostart = true;
+    args = [ "Rk" "monthly" "last" "15" ];
+    environment = [
+      "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
+      "DBHOST=localhost"
+      "DBPORT=3306"
+      "WORKDR=/var/lib/sruusp"
+    ];
+    calendars = [
+      "*-*-01 02:00:00"
+    ];
+  }
+
+  {
+    name = "sruusp-event";
+    workdir = "/var/lib/sruusp";
+    script = pkgs.writeShellScript "sruusp-event-user-timer.sh" ''
+      set -eu
+      manifest='${self.packages.${pkgs.system}.sruuspAssets}/manifest.tsv'
+      while IFS="$(printf '\t')" read -r kind rel target mode; do
+        [ -n "$kind" ] || continue
+        case "$kind" in
+          ro)
+            mkdir -p "/var/lib/sruusp/$(dirname "$rel")"
+            ln -sfn "$target" "/var/lib/sruusp/$rel"
+            ;;
+          write)
+            mkdir -p "/var/lib/sruusp/$(dirname "$rel")"
+            if [ ! -e "/var/lib/sruusp/$rel" ] || [ -L "/var/lib/sruusp/$rel" ]; then
+              rm -f "/var/lib/sruusp/$rel"
+              : > "/var/lib/sruusp/$rel"
+              chmod "${mode:-0644}" "/var/lib/sruusp/$rel"
+            fi
+            ;;
+        esac
+      done < "$manifest"
+      ln -sfn "${self.packages.${pkgs.system}.sruusp}/bin/UpdateUserSetProperty" "/var/lib/sruusp/UpdateUserSetProperty"
+      exec "/var/lib/sruusp/run.sh" "$@"
+    '';
+    autostart = true;
+    args = [ "Sr" "220" "Pt" "100000" "Ev" "500000" ];
+    environment = [
+      "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
+      "DBHOST=localhost"
+      "DBPORT=3306"
+      "WORKDR=/var/lib/sruusp"
+    ];
+    calendars = [
+      "*-*-* 13:45:00"
+      "*-*-* 15:10:00"
+    ];
+  }
 ]

@@ -37,7 +37,7 @@ let
         Environment = [ "PATH=${pathValue}" ] ++ (job.environment or [ ]);
         ExecStart =
           "${pkgs.bash}/bin/bash ${lib.escapeShellArg job.script}"
-          + (lib.optionalString (job.args != [ ]) " ${lib.concatStringsSep " " (map lib.escapeShellArg job.args)}");
+          + (lib.optionalString ((job.args or [ ]) != [ ]) " ${lib.concatStringsSep " " (map lib.escapeShellArg (job.args or [ ]))}");
       };
     };
 

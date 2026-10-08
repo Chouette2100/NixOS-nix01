@@ -6,6 +6,8 @@
 {
   systemd.tmpfiles.rules = [
     "d /var/lib/srgce 0755 chouette users - -"
+    "d /var/lib/sruusp 0755 chouette users - -"
+    "d /var/lib/srscd 0755 chouette users - -"
   ];
 
   # -----------------------------------------------------------------------------
@@ -101,12 +103,19 @@
             mkdir -p "/var/lib/srcgi/$(dirname "$rel")"
             ln -sfn "$target" "/var/lib/srcgi/$rel"
             ;;
+          mkdir)
+            if [ -L "/var/lib/srcgi/$rel" ] || [ -f "/var/lib/srcgi/$rel" ]; then
+              rm -f "/var/lib/srcgi/$rel"
+            fi
+            mkdir -p "/var/lib/srcgi/$rel"
+            chmod "''${mode:-0755}" "/var/lib/srcgi/$rel"
+            ;;
           write)
             mkdir -p "/var/lib/srcgi/$(dirname "$rel")"
             if [ ! -e "/var/lib/srcgi/$rel" ] || [ -L "/var/lib/srcgi/$rel" ]; then
               rm -f "/var/lib/srcgi/$rel"
               : > "/var/lib/srcgi/$rel"
-              chmod "${mode:-0644}" "/var/lib/srcgi/$rel"
+              chmod "''${mode:-0644}" "/var/lib/srcgi/$rel"
             fi
             ;;
         esac
@@ -120,6 +129,10 @@
       WorkingDirectory = "/var/lib/srcgi"; # ここがアプリのカレントディレクトリになる
       Environment = [
           "HTTPPORT=8000"
+          "DBHOST=localhost"
+          "DBPORT=3306"
+          "DBHOST1=192.168.1.10"
+          "DBPORT1=3306"
           "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
       ];
       ExecStart = "${self.packages.${pkgs.system}.srcgi}/bin/SRCGI";
