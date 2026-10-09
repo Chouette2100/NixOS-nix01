@@ -8,6 +8,8 @@
     "d /var/lib/srgce 0755 chouette users - -"
     "d /var/lib/sruusp 0755 chouette users - -"
     "d /var/lib/srscd 0755 chouette users - -"
+    "d /var/lib/srcntrb 0755 chouette users - -"
+    "d /var/lib/srsei 0755 chouette users - -"
   ];
 
   # -----------------------------------------------------------------------------

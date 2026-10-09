@@ -1,0 +1,25 @@
+items:
+  - kind: file
+    src: DBConfig.enc.yml
+  - kind: file
+    src: run.sh
+
+# kind: write
+# src は使わず、/var/lib/sruusp に実体を作る。
+# 例:
+#  - kind: write
+#    dest: runtime-state.txt
+#    mode: "0644"
+
+# kind: dir
+# ディレクトリーの内容を/nix/storeにコピーし、ディレクトリーのリンクを/var/lib/sruuspにリンクを作る。
+# - kind: dir
+#   src: templates
+#   dest: templates
+
+# king: rename
+# リネームして/var/lib/sruuspにリンクを作る。
+# - kind: rename
+#   src: ServerConfig_HTTPPORT.enc.yaml
+#   dest: ServerConfig.enc.yaml
+

@@ -267,6 +267,92 @@
   }
 
   {
+    name = "srcntrb";
+    workdir = "/var/lib/srcntrb";
+    script = pkgs.writeShellScript "srcntrb-user-timer.sh" ''
+      set -eu
+
+      manifest='${self.packages.${pkgs.system}.srcntrbAssets}/manifest.tsv'
+
+      while IFS="$(printf '\t')" read -r kind rel target mode; do
+        [ -n "$kind" ] || continue
+
+        case "$kind" in
+          ro)
+            mkdir -p "/var/lib/srcntrb/$(dirname "$rel")"
+            ln -sfn "$target" "/var/lib/srcntrb/$rel"
+            ;;
+          write)
+            mkdir -p "/var/lib/srcntrb/$(dirname "$rel")"
+            if [ ! -e "/var/lib/srcntrb/$rel" ] || [ -L "/var/lib/srcntrb/$rel" ]; then
+              rm -f "/var/lib/srcntrb/$rel"
+              : > "/var/lib/srcntrb/$rel"
+              chmod "${mode:-0644}" "/var/lib/srcntrb/$rel"
+            fi
+            ;;
+        esac
+      done < "$manifest"
+
+      ln -sfn "${self.packages.${pkgs.system}.srcntrb}/bin/SRCntrb" "/var/lib/srcntrb/SRCntrb"
+      exec ${pkgs.bash}/bin/bash "/var/lib/srcntrb/srcntrb.sh"
+    '';
+    autostart = true;
+    args = [ ];
+    environment = [
+      "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
+      "DBHOST=localhost"
+      "DBPORT=3306"
+      "WORKDR=/var/lib/srcntrb"
+    ];
+    calendars = [
+      "*-*-* *:28:00"
+    ];
+  }
+
+  {
+    name = "srsei";
+    workdir = "/var/lib/srsei";
+    script = pkgs.writeShellScript "srsei-user-timer.sh" ''
+      set -eu
+
+      manifest='${self.packages.${pkgs.system}.srseiAssets}/manifest.tsv'
+
+      while IFS="$(printf '\t')" read -r kind rel target mode; do
+        [ -n "$kind" ] || continue
+
+        case "$kind" in
+          ro)
+            mkdir -p "/var/lib/srsei/$(dirname "$rel")"
+            ln -sfn "$target" "/var/lib/srsei/$rel"
+            ;;
+          write)
+            mkdir -p "/var/lib/srsei/$(dirname "$rel")"
+            if [ ! -e "/var/lib/srsei/$rel" ] || [ -L "/var/lib/srsei/$rel" ]; then
+              rm -f "/var/lib/srsei/$rel"
+              : > "/var/lib/srsei/$rel"
+              chmod "${mode:-0644}" "/var/lib/srsei/$rel"
+            fi
+            ;;
+        esac
+      done < "$manifest"
+
+      ln -sfn "${self.packages.${pkgs.system}.srsei}/bin/SetEventIDofOldEvents" "/var/lib/srsei/SetEventIDofOldEvents"
+      exec ${pkgs.bash}/bin/bash "/var/lib/srsei/run.sh"
+    '';
+    autostart = true;
+    args = [ ];
+    environment = [
+      "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
+      "DBHOST=localhost"
+      "DBPORT=3306"
+      "WORKDR=/var/lib/srsei"
+    ];
+    calendars = [
+      "*-*-* 00/2:30:00"
+    ];
+  }
+
+  {
     name = "sruusp-weekly";
     workdir = "/var/lib/sruusp";
     script = pkgs.writeShellScript "sruusp-weekly-user-timer.sh" ''

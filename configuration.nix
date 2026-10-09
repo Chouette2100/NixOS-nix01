@@ -145,9 +145,10 @@ in
     # Nix 開発
     nixd
     nixpkgs-fmt
+    nh
     # ---
 
-    # DB クライアント
+    # DB
     mariadb
   ];
 
