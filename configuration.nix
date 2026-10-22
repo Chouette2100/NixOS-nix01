@@ -95,6 +95,18 @@ in
     };
   };
 
+  # Tailscale サービスの有効化
+  services.tailscale.enable = true;
+
+  # ファイアウォールの設定
+  networking.firewall = {
+    enable = true;
+    # Tailscaleインターフェースからの通信をすべて許可
+    trustedInterfaces = [ "tailscale0" ];
+    # Tailscaleのルーティングを正常にする設定
+    checkReversePath = false;
+  };
+
   # -----------------------------------------------------------------------------
   # ファイアウォール
   # -----------------------------------------------------------------------------
