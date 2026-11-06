@@ -88,7 +88,7 @@ in
 
   services.openssh = {
     enable = true;
-    ports = [ 9978 ];
+    ports = [ 22 ];
     settings = {
       PermitRootLogin = "no";
       PasswordAuthentication = false;
@@ -112,7 +112,7 @@ in
   # -----------------------------------------------------------------------------
 
   networking.firewall.allowedTCPPorts =
-    [ 9978 8081 8000 8080]  # SSH, dschat, SRCGI, SRCGI
+    [ 8000 8080]  # SRCGI, SRCGI
     ++ lib.optionals isNix01 [ 80 443 ];  # Caddy / Let's Encrypt
   # -----------------------------------------------------------------------------
   # システムパッケージ（サーバー用途のみ）

@@ -27,9 +27,10 @@
           User git
 
         Host kagoya10
-          HostName 133.18.160.207
+          # HostName 133.18.160.207
+          HostName kagoya10.tail2b675a.ts.net
           User chouette
-          Port 9978
+          # Port 9978
 
         # nix02 が構築されたら IP/ホスト名を記入してください
         # Host nix02
@@ -38,7 +39,8 @@
         #   Port 9978
 
         Host *
-          Port 9978
+          # Port 9978
+          Port 22
           IdentityFile ~/.ssh/id_ed25519
           IdentitiesOnly yes
           ServerAliveInterval 60

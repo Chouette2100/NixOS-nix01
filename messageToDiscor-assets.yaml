@@ -1,0 +1,23 @@
+items:
+  - kind: file
+    src: config.enc.yml
+
+# kind: write
+# src は使わず、/var/lib/messageToDiscort に実体を作る。
+# 例:
+#  - kind: write
+#    dest: runtime-state.txt
+#    mode: "0644"
+
+# kind: dir
+# ディレクトリーの内容を/nix/storeにコピーし、ディレクトリーのリンクを/var/lib/messageToDiscortにリンクを作る。
+# - kind: dir
+#   src: templates
+#   dest: templates
+
+# kind: rename
+# リネームして/var/lib/messageToDiscortにリンクを作る。
+# - kind: rename
+#   src: ServerConfig_HTTPPORT.enc.yaml
+#   dest: ServerConfig.enc.yaml
+

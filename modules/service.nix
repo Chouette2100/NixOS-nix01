@@ -73,7 +73,7 @@
       ExecStart = ''
         ${pkgs.openssh}/bin/ssh -p 9978 -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes -N \
           -L 9910:127.0.0.1:3306 \
-          chouette@192.168.1.10
+          chouette@kagoya10.tail2b675a.ts.net
       '';
       Restart = "always";
       RestartSec = "15s";
