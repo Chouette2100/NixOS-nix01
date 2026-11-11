@@ -75,8 +75,8 @@
     args = [ ];
     environment = [
       "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
-      "DBHOST=192.168.1.10"
-      "DBPORT=3306"
+      "DBHOST=127.0.0.1"
+      "DBPORT=9910"
     ];
     calendars = [
       "*-*-* *:05,35:00"
@@ -118,8 +118,8 @@
     args = [ "Sr" "220" "Pt" "100000" "Rk" "daily" "last" "10" ];
     environment = [
       "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
-      "DBHOST=192.168.1.10"
-      "DBPORT=3306"
+      "DBHOST=127.0.0.1"
+      "DBPORT=9910"
       "WORKDR=/var/lib/sruusp"
     ];
     calendars = [
@@ -166,8 +166,8 @@
     args = [ ];
     environment = [
       "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
-      "DBHOST=192.168.1.10"
-      "DBPORT=3306"
+      "DBHOST=127.0.0.1"
+      "DBPORT=9910"
       "WORKDR=/var/lib/srscd"
     ];
     calendars = [
@@ -209,8 +209,8 @@
     args = [ ];
     environment = [
       "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
-      "DBHOST=192.168.1.10"
-      "DBPORT=3306"
+      "DBHOST=127.0.0.1"
+      "DBPORT=9910"
       "WORKDR=/var/lib/srscd"
     ];
     calendars = [
@@ -252,8 +252,8 @@
     args = [ ];
     environment = [
       "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
-      "DBHOST=192.168.1.10"
-      "DBPORT=3306"
+      "DBHOST=127.0.0.1"
+      "DBPORT=9910"
       "WORKDR=/var/lib/srscd"
     ];
     calendars = [
@@ -299,8 +299,8 @@
     args = [ ];
     environment = [
       "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
-      "DBHOST=192.168.1.10"
-      "DBPORT=3306"
+      "DBHOST=127.0.0.1"
+      "DBPORT=9910"
       "WORKDR=/var/lib/srcntrb"
     ];
     calendars = [
@@ -342,8 +342,8 @@
     args = [ ];
     environment = [
       "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
-      "DBHOST=192.168.1.10"
-      "DBPORT=3306"
+      "DBHOST=127.0.0.1"
+      "DBPORT=9910"
       "WORKDR=/var/lib/srsei"
     ];
     calendars = [
@@ -381,8 +381,8 @@
     args = [ "Sr" "220" "Pt" "100000" "Rk" "daily" "last" "10" "Rk" "weekly" "last" "15" ];
     environment = [
       "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
-      "DBHOST=192.168.1.10"
-      "DBPORT=3306"
+      "DBHOST=127.0.0.1"
+      "DBPORT=9910"
       "WORKDR=/var/lib/sruusp"
     ];
     calendars = [
@@ -420,8 +420,8 @@
     args = [ "Rk" "monthly" "last" "15" ];
     environment = [
       "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
-      "DBHOST=192.168.1.10"
-      "DBPORT=3306"
+      "DBHOST=127.0.0.1"
+      "DBPORT=9910"
       "WORKDR=/var/lib/sruusp"
     ];
     calendars = [
@@ -459,8 +459,8 @@
     args = [ "Sr" "220" "Pt" "100000" "Ev" "500000" ];
     environment = [
       "SOPS_AGE_KEY_FILE=/home/chouette/.config/age/key2.txt"
-      "DBHOST=192.168.1.10"
-      "DBPORT=3306"
+      "DBHOST=127.0.0.1"
+      "DBPORT=9910"
       "WORKDR=/var/lib/sruusp"
     ];
     calendars = [
